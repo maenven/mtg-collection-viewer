@@ -169,7 +169,6 @@ function renderCardHTML(card, nameCounts = {}) {
       <div class="card-set clickable" data-filter="set" data-value="${card.setName}"><img src="${setIcon}" class="set-icon" alt="${card.setCode}" onerror="this.src='${fallbackIcon}'">${card.setName}</div>
       <div class="card-details">
         <span class="badge rarity-${card.rarity} clickable" data-filter="rarity" data-value="${card.rarity}">${card.rarity}</span>
-        ${card.binderName ? `<span class="badge binder-badge binder-type-${String(card.binderType || 'unknown').trim().toLowerCase()}" title="${card.binderType ? `Binder type: ${card.binderType}` : 'Binder type not specified'}">${card.binderName}</span>` : ''}
         ${card.foil !== 'normal' ? `<span class="badge foil-${card.foil} clickable" data-filter="foil" data-value="${card.foil}">${card.foil}</span>` : ''}
         ${card.reserved ? `<span class="badge reserved-badge clickable" data-filter="reserved" data-value="yes">RL</span>` : ''}
         ${mainType ? `<span class="badge type-badge clickable" data-filter="type" data-value="${mainType}">${mainType}</span>` : ''}
@@ -247,6 +246,7 @@ function setupCardInteractions(container) {
       else if (filter === 'set') document.getElementById('set-filter').value = value;
       else if (filter === 'cmc') window.cmcFilter = parseInt(value);
       else if (filter === 'reserved') document.getElementById('reserved-filter').value = value;
+      else if (filter === 'binder') window.binderFilter = value;
       else if (filter === 'search') document.getElementById('search').value = value;
       applyFilters();
     });
