@@ -559,6 +559,7 @@ function applyFilters() {
   const reservedFilter = document.getElementById('reserved-filter')?.value || '';
   const duplicatesFilter = document.getElementById('duplicates-filter')?.value || '';
   const binderFilter = window.binderFilter || '';
+  const binderTypeFilter = document.getElementById('binder-type-filter')?.value || '';
   const sort = document.getElementById('sort')?.value || 'price-desc';
   const [priceMin, priceMax] = priceSlider ? priceSlider.get().map(Number) : [0, maxPriceValue];
   const cmcFilter = window.cmcFilter;
@@ -587,6 +588,7 @@ function applyFilters() {
     const matchesDuplicates = !duplicatesFilter || 
       (duplicatesFilter === 'duplicates' ? nameCounts[duplicateKey] > 1 : nameCounts[duplicateKey] === 1);
     const matchesBinder = !binderFilter || card.binderName === binderFilter;
+    const matchesBinderType = !binderTypeFilter || String(card.binderType || '').trim() .toLowerCase() === binderTypeFilter;
     
     return card.name.toLowerCase().includes(search) &&
       (!setFilter || card.setName.toLowerCase().includes(setFilter)) &&
@@ -601,6 +603,7 @@ function applyFilters() {
       matchesReserved &&
       matchesDuplicates &&
       matchesBinder &&
+      matchesBinderType &&
       getCardPrice(card) >= priceMin &&
       getCardPrice(card) <= priceMax;
   });
@@ -681,6 +684,7 @@ document.getElementById('color-filter')?.addEventListener('change', applyFilters
 document.getElementById('keyword-filter')?.addEventListener('change', applyFilters);
 document.getElementById('reserved-filter')?.addEventListener('change', applyFilters);
 document.getElementById('duplicates-filter')?.addEventListener('change', applyFilters);
+document.getElementById('binder-type-filter')?.addEventListener('change', applyFilters);
 document.querySelectorAll('.color-checkboxes input').forEach(cb => cb.addEventListener('change', applyFilters));
 
 document.getElementById('clear-filters')?.addEventListener('click', () => {
@@ -694,6 +698,7 @@ document.getElementById('clear-filters')?.addEventListener('click', () => {
   document.getElementById('keyword-filter') && (document.getElementById('keyword-filter').value = '');
   document.getElementById('reserved-filter') && (document.getElementById('reserved-filter').value = '');
   document.getElementById('duplicates-filter') && (document.getElementById('duplicates-filter').value = '');
+  document.getElementById('binder-type-filter') && (document.getElementById('binder-type-filter').value = '');
   document.querySelectorAll('.color-checkboxes input').forEach(cb => cb.checked = false);
   if (priceSlider) priceSlider.set([0, maxPriceValue]);
   window.cmcFilter = undefined;
