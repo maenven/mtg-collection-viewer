@@ -586,7 +586,7 @@ function applyFilters() {
     const matchesReserved = !reservedFilter || (reservedFilter === 'yes' ? card.reserved : !card.reserved);
     const matchesDuplicates = !duplicatesFilter || 
       (duplicatesFilter === 'duplicates' ? nameCounts[duplicateKey] > 1 : nameCounts[duplicateKey] === 1);
-    const matchesBinder =!binderFilter || card.binderName === binderFilter;
+    const matchesBinder = !binderFilter || card.binderName === binderFilter;
     
     return card.name.toLowerCase().includes(search) &&
       (!setFilter || card.setName.toLowerCase().includes(setFilter)) &&
