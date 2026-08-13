@@ -169,6 +169,7 @@ function renderCardHTML(card, nameCounts = {}) {
       <div class="card-set clickable" data-filter="set" data-value="${card.setName}"><img src="${setIcon}" class="set-icon" alt="${card.setCode}" onerror="this.src='${fallbackIcon}'">${card.setName}</div>
       <div class="card-details">
         <span class="badge rarity-${card.rarity} clickable" data-filter="rarity" data-value="${card.rarity}">${card.rarity}</span>
+        ${card.binderName ? `<span class="badge binder-badge binder-type-${String(card.binderType || 'unknown').trim().toLowerCase()}" title="${card.binderType ? `Binder type: ${card.binderType}` : 'Binder type not specified'}">${card.binderName}</span>` : ''}
         ${card.foil !== 'normal' ? `<span class="badge foil-${card.foil} clickable" data-filter="foil" data-value="${card.foil}">${card.foil}</span>` : ''}
         ${card.reserved ? `<span class="badge reserved-badge clickable" data-filter="reserved" data-value="yes">RL</span>` : ''}
         ${mainType ? `<span class="badge type-badge clickable" data-filter="type" data-value="${mainType}">${mainType}</span>` : ''}
@@ -448,6 +449,8 @@ async function loadCollection() {
     name: headers.findIndex(h => h === 'name'),
     setCode: headers.findIndex(h => h === 'set code' || h === 'edition code' || h === 'set'),
     setName: headers.findIndex(h => h === 'set name' || h === 'edition'),
+    binderName: headers.findIndex(h => h === 'binder name'),
+    binderType: headers.findIndex(h => h === 'binder type'),
     collectorNumber: headers.findIndex(h => h === 'collector number' || h === 'card number'),
     foil: headers.findIndex(h => h === 'foil'),
     rarity: headers.findIndex(h => h === 'rarity'),
@@ -467,6 +470,8 @@ async function loadCollection() {
         name: parts[col.name] || '',
         setCode: parts[col.setCode] || '',
         setName: parts[col.setName] || '',
+        binderName: col.binderName >= 0 ? (parts[col.binderName] || '').trim() : '',
+        binderType: col.binderType >= 0 ? (parts[col.binderType] || '').trim() : '',
         collectorNumber: parts[col.collectorNumber] || '',
         foil: parts[col.foil] || 'normal',
         rarity: parts[col.rarity] || 'common',
