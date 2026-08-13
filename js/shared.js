@@ -167,8 +167,17 @@ function renderCardHTML(card, nameCounts = {}) {
         <div class="card-value">${formatPrice(getCardPrice(card) * card.quantity, getCardCurrency(card))}</div>
       </div>
       <div class="card-set clickable" data-filter="set" data-value="${card.setName}"><img src="${setIcon}" class="set-icon" alt="${card.setCode}" onerror="this.src='${fallbackIcon}'">${card.setName}</div>
-      <div class="card-details">
-        <span class="badge rarity-${card.rarity} clickable" data-filter="rarity" data-value="${card.rarity}">${card.rarity}</span>
+<div class="card-details">
+  <span class="badge rarity-${card.rarity} clickable" data-filter="rarity" data-value="${card.rarity}">${card.rarity}</span>
+
+  ${card.binderName
+    ? `<span class="badge binder-badge clickable binder-type-${String(card.binderType || 'unknown').trim().toLowerCase()}"
+         data-filter="binder"
+         data-value="${card.binderName}"
+         title="${card.binderType || 'Binder'}">
+         ${card.binderName}
+       </span>`
+    : ''}
         ${card.foil !== 'normal' ? `<span class="badge foil-${card.foil} clickable" data-filter="foil" data-value="${card.foil}">${card.foil}</span>` : ''}
         ${card.reserved ? `<span class="badge reserved-badge clickable" data-filter="reserved" data-value="yes">RL</span>` : ''}
         ${mainType ? `<span class="badge type-badge clickable" data-filter="type" data-value="${mainType}">${mainType}</span>` : ''}
@@ -549,6 +558,7 @@ function applyFilters() {
   const keywordFilter = document.getElementById('keyword-filter')?.value || '';
   const reservedFilter = document.getElementById('reserved-filter')?.value || '';
   const duplicatesFilter = document.getElementById('duplicates-filter')?.value || '';
+  const binderFilter = window.binderFilter || '';
   const sort = document.getElementById('sort')?.value || 'price-desc';
   const [priceMin, priceMax] = priceSlider ? priceSlider.get().map(Number) : [0, maxPriceValue];
   const cmcFilter = window.cmcFilter;
@@ -576,6 +586,7 @@ function applyFilters() {
     const matchesReserved = !reservedFilter || (reservedFilter === 'yes' ? card.reserved : !card.reserved);
     const matchesDuplicates = !duplicatesFilter || 
       (duplicatesFilter === 'duplicates' ? nameCounts[duplicateKey] > 1 : nameCounts[duplicateKey] === 1);
+    const matchesBinder =!binderFilter || card.binderName === binderFilter;
     
     return card.name.toLowerCase().includes(search) &&
       (!setFilter || card.setName.toLowerCase().includes(setFilter)) &&
@@ -589,7 +600,9 @@ function applyFilters() {
       matchesCmc &&
       matchesReserved &&
       matchesDuplicates &&
-      getCardPrice(card) >= priceMin && getCardPrice(card) <= priceMax;
+      matchesBinder &&
+      getCardPrice(card) >= priceMin &&
+      getCardPrice(card) <= priceMax;
   });
   
   filteredCollection.sort((a, b) => {
@@ -684,6 +697,7 @@ document.getElementById('clear-filters')?.addEventListener('click', () => {
   document.querySelectorAll('.color-checkboxes input').forEach(cb => cb.checked = false);
   if (priceSlider) priceSlider.set([0, maxPriceValue]);
   window.cmcFilter = undefined;
+  window.binderFilter = '';
   applyFilters();
 });
 
