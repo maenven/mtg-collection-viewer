@@ -3142,3 +3142,36 @@ h1 {
   margin-top: 4px;
   font-weight: bold;
 }
+
+/* Binder name badges: same base appearance as other card badges. */
+.binder-badge {
+  color: #fff;
+  border: 1px solid transparent;
+  cursor: default;
+}
+
+/* Binder: tradeable */
+.binder-badge.binder-type-binder {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  border-color: #4caf50;
+}
+
+/* List: may not be owned or assigned to a collection yet */
+.binder-badge.binder-type-list {
+  background: linear-gradient(135deg, #ef6c00, #e65100);
+  border-color: #ff9800;
+}
+
+/* Deck: not for trade */
+.binder-badge.binder-type-deck {
+  background: linear-gradient(135deg, #c62828, #8e0000);
+  border-color: #ef5350;
+}
+
+/* Fallback for an empty or unexpected Binder Type value */
+.binder-badge.binder-type-unknown {
+  background: var(--bg-tertiary);
+  border-color: #666;
+  color: var(--text-primary);
+}
+
